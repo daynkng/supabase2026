@@ -1742,11 +1742,11 @@ export default function Home() {
                   {[
                     [
                       "Natural research",
-                      "Research the market for general-purpose AI work agents, focusing on competitors, buyer segments, differentiation, and risks. Use the connected Shared State project context automatically. Answer me normally without narrating context retrieval or write-back steps. Save only durable findings, decisions, open questions, and task progress; do not create an artifact unless I ask for a reusable document.",
+                      "Research the market for general-purpose AI work agents, focusing on competitors, buyer segments, differentiation, and risks. Use the connected Shared State project context automatically and answer me normally. Do not update Shared State until I say: Save this session to Shared State.",
                     ],
                     [
                       "Napa weekend",
-                      "Continue planning Napa Weekend using its connected context. Respect its preferences, constraints, and budget. Propose a $410 hotel test payment and give me the review link. Answer naturally without narrating context retrieval or write-back steps. Save only durable planning changes, and do not claim a booking happened until payment is confirmed.",
+                      "Continue planning Napa Weekend using its connected context. Respect its preferences, constraints, and budget. Propose a $410 hotel test payment and give me the review link. Answer naturally and do not update Shared State until I say: Save this session to Shared State. Do not claim a booking happened until payment is confirmed.",
                     ],
                   ].map(([name, prompt]) => (
                     <div className="prompt-card" key={name}>
