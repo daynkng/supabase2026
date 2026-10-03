@@ -49,6 +49,7 @@ const money = (c: number) =>
     currency: "USD",
     maximumFractionDigits: 2,
   }).format(c / 100);
+const configuredAppUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "");
 const time = (s: string) =>
   new Date(s).toLocaleString(undefined, {
     month: "short",
@@ -112,6 +113,9 @@ function Dialog({
   );
 }
 export default function Home() {
+  const mcpUrl = `${
+    configuredAppUrl || (typeof location !== "undefined" ? location.origin : "")
+  }/mcp`;
   const [data, setData] = useState<Data | null>(null),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false),
@@ -1605,13 +1609,11 @@ export default function Home() {
               <section className="panel connection-url">
                 <h2>Shared MCP endpoint</h2>
                 <div className="copy-field">
-                  <code>
-                    {typeof location !== "undefined" ? location.origin : ""}/mcp
-                  </code>
+                  <code>{mcpUrl}</code>
                   <button
                     aria-label="Copy MCP URL"
                     onClick={() => {
-                      navigator.clipboard.writeText(`${location.origin}/mcp`);
+                      navigator.clipboard.writeText(mcpUrl);
                       setNotice("MCP URL copied.");
                     }}
                   >
