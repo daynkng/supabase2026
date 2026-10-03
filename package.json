@@ -1,0 +1,46 @@
+{
+  "name": "shared-state",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1",
+    "build": "next build",
+    "start": "next start --hostname 127.0.0.1",
+    "test": "node --import tsx --test tests/domain.test.ts",
+    "typecheck": "tsc --noEmit",
+    "db:setup": "node --import tsx scripts/setup.ts",
+    "demo:reset": "node --import tsx scripts/reset.ts",
+    "test:integration": "node --import tsx --test tests/integration.test.ts tests/wallet.test.ts",
+    "db:index": "node --import tsx scripts/index.ts",
+    "format": "prettier --write app lib scripts tests docs README.md *.json *.ts .github/workflows/*.yml",
+    "verify:deployment": "node --import tsx scripts/verify-deployment.ts",
+    "wallet:credential": "node --import tsx scripts/wallet-credential.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.65.0",
+    "@google/genai": "^1.20.0",
+    "@modelcontextprotocol/sdk": "^1.18.0",
+    "@stripe/link-sdk": "^0.11.0",
+    "@supabase/supabase-js": "^2.57.0",
+    "lucide-react": "^0.468.0",
+    "next": "^15.5.0",
+    "pdf-lib": "^1.17.1",
+    "pg": "^8.16.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "stripe": "^18.5.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8",
+    "@electric-sql/pglite-pgvector": "^0.0.9",
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.15.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "prettier": "^3.9.9",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
+  },
+  "type": "module"
+}
