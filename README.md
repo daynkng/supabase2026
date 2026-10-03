@@ -8,7 +8,7 @@ A Context Control Center and shared MCP backend for ChatGPT and Claude. Structur
 - PostgreSQL-backed validated writes, optimistic revisions, idempotent requests, version history, and provenance.
 - Claude extraction and context selection; Gemini PDF/image parsing and 768-dimensional embeddings; pgvector scope-filtered retrieval.
 - Private Supabase artifact storage and expiring download links.
-- Nine public Streamable HTTP MCP tools, including the standard `commit_work` end-of-work write-back, plus two protected Link Agent Wallet test-purchase tools.
+- Eleven public Streamable HTTP MCP tools, including the normal `start_session` / `end_session` conversation flow, plus two protected Link Agent Wallet test-purchase tools.
 - Link OAuth/PKCE, encrypted token storage, human approval, budget reservations, and secure test-credential handoff. See [wallet setup and limits](docs/LINK-WALLET.md).
 - Stripe **test-only** human Checkout, atomic budget reservations, verified/idempotent webhooks, and simulated booking task updates.
 - Synthetic market research and Napa seed projects; no invented research or pre-completed payments.

@@ -83,7 +83,7 @@ Run both scripts in `DEMO.md`. Confirm each model call, PDF parse, artifact uplo
 npm run verify:deployment -- https://YOUR-DEPLOYMENT
 ```
 
-Uses the real MCP SDK over HTTP to initialize, discover all eleven tools, retrieve both seeded projects and their context, and check personal-only scope. Calls persist normal retrieval/activity records and may use configured model providers. Structured-only fallback and provider warnings remain visible. This does not substitute for actual ChatGPT/Claude client handoffs or Stripe Checkout.
+Uses the real MCP SDK over HTTP to initialize, discover all thirteen tools, retrieve both seeded projects and their context, and check personal-only scope. Calls persist normal retrieval/activity records and may use configured model providers. Structured-only fallback and provider warnings remain visible. This does not substitute for actual ChatGPT/Claude client handoffs or Stripe Checkout.
 
 The Supabase HTTPS project URL is not a PostgreSQL connection string. Obtain `DATABASE_URL` from the dashboard's **Connect** dialog (direct or session pooler), insert the database password, and save it in the ignored `.env.local`. The publishable key and JWKS URL are not required by this single-owner backend.
 

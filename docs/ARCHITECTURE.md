@@ -88,7 +88,7 @@ Pack fields: `project`, `personal_context`, `constraints`, `permissions`, `knowl
 
 ## MCP
 
-Nine public tools: `list_projects`, `get_project_state`, `get_context`, `commit_work`, `ingest_output`, `write_update`, `save_artifact`, `search_artifacts`, `request_payment`. `commit_work` is the normal end-of-work path; the three lower-level write tools remain for advanced and recovery use.
+Eleven public tools: `start_session`, `end_session`, `list_projects`, `get_project_state`, `get_context`, `commit_work`, `ingest_output`, `write_update`, `save_artifact`, `search_artifacts`, and `request_payment`. `start_session` and `end_session` are the normal conversation path; the lower-level read/write tools remain for advanced and recovery use.
 
 The MCP SDK serves stateless Streamable HTTP POST. Each tool delegates to `lib/service.ts`, the same dispatcher used by UI actions. The UI-only surface includes human editing, project creation, signed uploads, spending rules, and Checkout approval. Tool errors are returned as `isError` responses.
 

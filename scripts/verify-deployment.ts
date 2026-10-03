@@ -26,6 +26,8 @@ try {
   await client.connect(transport);
   const { tools } = await client.listTools();
   const expected = [
+    "start_session",
+    "end_session",
     "list_projects",
     "get_context",
     "get_project_state",
@@ -43,7 +45,7 @@ try {
       tools.some((t) => t.name === name),
       `Missing tool: ${name}`,
     );
-  console.log("PASS MCP initialization and all eleven tools");
+  console.log(`PASS MCP initialization and all ${tools.length} tools`);
   async function call(name: string, args: Record<string, unknown>) {
     const result = await client.callTool({ name, arguments: args });
     assert(!result.isError, `${name} returned a tool error`);
