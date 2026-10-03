@@ -927,10 +927,9 @@ export default function Home() {
                 {[
                   "overview",
                   "context",
-                  "tasks",
                   "artifacts",
                   "activity",
-                  "inspector",
+                  "questions",
                   ...(b ? ["budget"] : []),
                 ].map((t) => (
                   <button
@@ -941,8 +940,20 @@ export default function Home() {
                       setSearch("");
                     }}
                   >
-                    {t[0].toUpperCase() + t.slice(1)}
-                    {t === "tasks" && <span>{tasks.length}</span>}
+                    {t === "overview"
+                      ? "Research summary"
+                      : t === "questions"
+                        ? "Open questions"
+                        : t[0].toUpperCase() + t.slice(1)}
+                    {t === "questions" && (
+                      <span>
+                        {
+                          current.filter(
+                            (r) => r.data.kind === "open_question",
+                          ).length
+                        }
+                      </span>
+                    )}
                     {t === "artifacts" && (
                       <span>
                         {
@@ -963,11 +974,16 @@ export default function Home() {
                       {[
                         ["Context items", current.length],
                         [
-                          "Decisions",
-                          current.filter((r) => r.data.kind === "decision")
+                          "Research findings",
+                          current.filter((r) => r.data.kind === "knowledge")
                             .length,
                         ],
-                        ["Tasks completed", `${completed} / ${tasks.length}`],
+                        [
+                          "Open questions",
+                          current.filter(
+                            (r) => r.data.kind === "open_question",
+                          ).length,
+                        ],
                         [
                           "Artifacts",
                           artifacts.filter((r) => r.data.status === "active")
@@ -984,16 +1000,20 @@ export default function Home() {
                   <div className="lower-grid">
                     <section className="panel">
                       <div className="panel-head">
-                        <h2>Next steps</h2>
-                        <button
-                          className="text-button"
-                          onClick={() => setTab("tasks")}
-                        >
-                          All tasks
-                        </button>
+                        <h2>Research summary</h2>
+                        <Layers size={18} />
                       </div>
-                      {taskList(
-                        tasks.filter((r) => r.data.status !== "completed"),
+                      {current.filter((r) => r.data.kind === "knowledge")
+                        .length ? (
+                        current
+                          .filter((r) => r.data.kind === "knowledge")
+                          .slice(0, 8)
+                          .map(contextCard)
+                      ) : (
+                        <Empty
+                          title="No research findings yet"
+                          description="Important findings saved by connected agents will appear here."
+                        />
                       )}
                     </section>
                     <section className="panel">
@@ -1029,21 +1049,8 @@ export default function Home() {
                     </section>
                     <section className="panel">
                       <div className="panel-head">
-                        <h2>Open questions</h2>
-                      </div>
-                      {current.filter((r) => r.data.kind === "open_question")
-                        .length ? (
-                        current
-                          .filter((r) => r.data.kind === "open_question")
-                          .map(contextCard)
-                      ) : (
-                        <Empty
-                          title="No open questions"
-                          description="Unresolved issues stay visible across agent handoffs."
-                        />
-                      )}
-                      <div className="panel-head">
                         <h2>Canonical artifacts</h2>
+                        <FileText size={18} />
                       </div>
                       {artifacts
                         .filter(
@@ -1071,6 +1078,33 @@ export default function Home() {
                     </section>
                   </div>
                 </>
+              )}
+              {tab === "questions" && (
+                <section className="panel">
+                  <div className="panel-head">
+                    <h2>Open questions</h2>
+                    <Badge>
+                      {
+                        current.filter(
+                          (r) => r.data.kind === "open_question",
+                        ).length
+                      }
+                    </Badge>
+                  </div>
+                  {current.filter((r) => r.data.kind === "open_question")
+                    .length ? (
+                    <div className="context-grid padded">
+                      {current
+                        .filter((r) => r.data.kind === "open_question")
+                        .map(contextCard)}
+                    </div>
+                  ) : (
+                    <Empty
+                      title="No open questions"
+                      description="Unresolved research questions will appear here automatically."
+                    />
+                  )}
+                </section>
               )}
               {tab === "context" && (
                 <>
