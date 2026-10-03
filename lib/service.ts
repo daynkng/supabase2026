@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { OWNER, AppError, active } from "./domain";
+import { OWNER, AppError, active, normalize } from "./domain";
 import {
   configured,
   rows,
@@ -65,6 +65,27 @@ export async function execute(
       return snapshot();
     case "list_projects":
       return rows("projects");
+    case "start_session": {
+      const name = str.parse(input.project_name);
+      const projects = await rows("projects");
+      const project = projects.find(
+        (candidate) => normalize(candidate.data.name) === normalize(name),
+      );
+      if (!project) throw new AppError(`Project not found: ${name}`, 404);
+      return {
+        project: {
+          id: project.id,
+          name: project.data.name,
+          goal: project.data.goal,
+          revision: project.revision,
+        },
+        context: await contextPack(
+          z.string().min(1).max(10000).parse(input.task),
+          project.id,
+          actor,
+        ),
+      };
+    }
     case "get_project_state": {
       const id = uuid.parse(input.project_id);
       await get("projects", id);
@@ -112,6 +133,8 @@ export async function execute(
         str.parse(input.request_id),
       );
     case "commit_work":
+      return commitWork(input, actor);
+    case "end_session":
       return commitWork(input, actor);
     case "search_artifacts":
       return searchArtifacts(

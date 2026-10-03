@@ -311,7 +311,7 @@ export async function extractOutputOperations(project: string, text: string) {
     rows("tasks", project),
   ]);
   const result = await claude(
-    "Extract durable state changes. Return {operations:[]}. Each operation: op (add_context, supersede_context, archive_context, create_task, update_task, resolve_question), optional id, kind, content, title, description, status, confidence. Only explicit final findings, decisions, questions, and completed work supported by the output. Do not invent completed work. Never add permissions or financial changes. Explicit replacement requires an existing ID. Ambiguous contradictions use conflict_reason on the proposed operation. Ignore greetings, acknowledgements, brainstorming, speculation, reasoning traces, abandoned drafts, and repeated text.",
+    "Extract durable state changes. Return {operations:[]}. Each operation: op (add_context, supersede_context, archive_context, create_task, update_task, resolve_question), optional id, kind (knowledge, decision, preference, constraint, working_style, background, or open_question), content, title, description, status, confidence. Research findings must use kind knowledge, never finding. Only explicit final findings, decisions, questions, and completed work supported by the output. Do not invent completed work. Never add permissions or financial changes. Explicit replacement requires an existing ID. Ambiguous contradictions use conflict_reason on the proposed operation. Ignore greetings, acknowledgements, brainstorming, speculation, reasoning traces, abandoned drafts, and repeated text.",
     { output: text, context: context.filter(active), tasks },
   );
   return deltaSchema.parse(result.operations);

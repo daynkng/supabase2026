@@ -26,11 +26,24 @@ export async function POST(req: Request) {
     { name: "Shared State", version: "0.1.0" },
     {
       instructions:
-        "Synthetic public workspace. At the beginning of project work, silently use list_projects to resolve the project and call get_context before acting. Then work and answer normally without narrating Shared State calls. Do not call commit_work after each response. Keep track of durable work during the conversation. Call commit_work exactly once only when the user explicitly asks to save, sync, wrap up, finish, or commit the session to Shared State. For that call, synthesize the session's durable findings, decisions, open questions, and task progress into output_text; omit greetings, workflow narration, reasoning traces, speculation, abandoned ideas, and repeated information. Include deliverable only when the user requested a document/artifact or the session produced a clearly reusable finished document. If the session contains no durable project information, do not call commit_work. Do not claim that closing a chat triggers a save because MCP receives no close event. Do not report tool metadata unless the user asks. Use ingest_output, save_artifact, and write_update only for advanced or recovery workflows. Read the current project revision before write_update. Payments are Stripe test mode and always require human review.",
+        "Synthetic public workspace with exactly two normal conversation touchpoints. START: on the first project-related user request, call start_session exactly once with the project name and current task. Do not call any Shared State tool again during ordinary conversation; answer and research normally, without narrating Shared State. END: only when the user explicitly says to save, sync, wrap up, finish, or end the session, call end_session exactly once. Summarize only the session's durable findings, decisions, open questions, and task progress in output_text; omit greetings, workflow narration, reasoning traces, speculation, abandoned ideas, and repeated information. Include deliverable only for a requested or clearly reusable finished document. If there is no durable information, skip end_session. Never call end_session after each response and never claim closing the chat triggers it because MCP receives no close event. The lower-level list_projects, get_context, commit_work, ingest_output, save_artifact, and write_update tools are recovery or advanced tools and must not be used in the normal start/work/end flow. Payments are Stripe test mode and always require human review.",
     },
   );
   const id = z.string().uuid();
   const tools: Record<string, { description: string; schema: any }> = {
+    start_session: {
+      description:
+        "The single Shared State call at the start of a project conversation. Resolve the named project and return its task-relevant context. Call once on the first project-related request, then use no Shared State tools during ordinary conversation.",
+      schema: {
+        project_name: z.string().min(1).max(1000),
+        task: z.string().min(1).max(10000),
+      },
+    },
+    end_session: {
+      description:
+        "The single Shared State call at explicit conversation wrap-up. Call only when the user asks to save, sync, wrap up, finish, or end the session. Provide a filtered durable session summary; do not include conversational filler or reasoning traces.",
+      schema: commitWorkSchema.shape,
+    },
     commit_work: {
       description:
         "Explicit session wrap-up write-back. Call exactly once only after the user asks to save, sync, wrap up, finish, or commit the session. Summarize the session's durable work in output_text; the server further filters findings, decisions, questions, and task progress. Omit deliverable for ordinary conversation and include it only for a requested or clearly reusable finished document. Never call after every response or imply that closing a chat triggers this tool. Conflicts go to human review.",
@@ -121,6 +134,7 @@ export async function POST(req: Request) {
         inputSchema: tool.schema,
         annotations: {
           readOnlyHint: [
+            "start_session",
             "list_projects",
             "get_project_state",
             "get_context",

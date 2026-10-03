@@ -65,3 +65,9 @@ test("unknown mutation keys rejected", () => {
 });
 test("normalization handles repeated whitespace and case", () =>
   assert.equal(normalize("  Boutique   HOTEL "), "boutique hotel"));
+test("model finding aliases normalize to canonical knowledge", () => {
+  const [operation] = deltaSchema.parse([
+    { op: "add_context", kind: "finding", content: "Durable research" },
+  ]);
+  assert.equal(operation.kind, "knowledge");
+});

@@ -12,7 +12,13 @@ export const kinds = [
   "permission",
   "open_question",
 ] as const;
-export const kindSchema = z.enum(kinds);
+export const kindSchema = z.preprocess(
+  (value) =>
+    value === "finding" || value === "research_finding"
+      ? "knowledge"
+      : value,
+  z.enum(kinds),
+);
 export type Row = {
   id: string;
   project_id: string | null;

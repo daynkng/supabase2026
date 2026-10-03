@@ -333,7 +333,9 @@ test("MCP protocol initializes, lists tools, and executes an actual shared-state
     method: "tools/list",
     params: {},
   });
-  assert.equal(list.result.tools.length, 11);
+  assert.equal(list.result.tools.length, 13);
+  assert(list.result.tools.some((tool: any) => tool.name === "start_session"));
+  assert(list.result.tools.some((tool: any) => tool.name === "end_session"));
   assert(list.result.tools.some((tool: any) => tool.name === "commit_work"));
   const result = await call({
     jsonrpc: "2.0",
