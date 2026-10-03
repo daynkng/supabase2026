@@ -32,8 +32,12 @@ export function db() {
     );
   return (pool ??= new pg.Pool({
     connectionString: process.env.DATABASE_URL,
-    max: 5,
+    // Vercel can keep many function instances warm. Each instance must hold at
+    // most one client so Supavisor transaction mode can multiplex them safely.
+    max: 1,
+    idleTimeoutMillis: 10000,
     connectionTimeoutMillis: 10000,
+    allowExitOnIdle: true,
   }));
 }
 export async function transaction<T>(fn: (c: pg.PoolClient) => Promise<T>) {
