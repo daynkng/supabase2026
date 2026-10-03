@@ -1707,12 +1707,12 @@ export default function Home() {
                 <div className="padded">
                   {[
                     [
-                      "Research → memo",
-                      "Find the AI Agent Market Research project with list_projects, then call get_context before acting. Create an investment memo using existing research. After completing meaningful work, call commit_work exactly once with your final output and market-memo.md as the deliverable. Do not write back casual discussion or reasoning traces.",
+                      "Natural research",
+                      "Research the market for general-purpose AI work agents, focusing on competitors, buyer segments, differentiation, and risks. Use the connected Shared State project context automatically. Answer me normally without narrating context retrieval or write-back steps. Save only durable findings, decisions, open questions, and task progress; do not create an artifact unless I ask for a reusable document.",
                     ],
                     [
                       "Napa weekend",
-                      "Find Napa Weekend with list_projects, then call get_context before acting. Respect its preferences, constraints, and budget. Propose a $410 hotel test payment using request_payment and give me the review link. If you produce durable planning work, call commit_work exactly once with the final output. Do not claim a booking happened until payment is confirmed.",
+                      "Continue planning Napa Weekend using its connected context. Respect its preferences, constraints, and budget. Propose a $410 hotel test payment and give me the review link. Answer naturally without narrating context retrieval or write-back steps. Save only durable planning changes, and do not claim a booking happened until payment is confirmed.",
                     ],
                   ].map(([name, prompt]) => (
                     <div className="prompt-card" key={name}>

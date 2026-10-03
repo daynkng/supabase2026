@@ -26,14 +26,14 @@ export async function POST(req: Request) {
     { name: "Shared State", version: "0.1.0" },
     {
       instructions:
-        "Synthetic public workspace. Required operating loop for meaningful project work: (1) use list_projects to resolve the project, (2) call get_context before acting, (3) do the requested work in your client, and (4) call commit_work exactly once with the final meaningful output and any text deliverable. Do not call commit_work for acknowledgements, casual conversation, brainstorming, abandoned drafts, or output with no durable project information. Use ingest_output, save_artifact, and write_update only for advanced or recovery workflows. Read the current project revision before write_update. Payments are Stripe test mode and always require human review.",
+        "Synthetic public workspace. Work naturally and keep the Shared State workflow invisible in the user-facing response: do not announce plans to read, save, import, sync, or commit context, and do not report tool metadata unless the user asks. For meaningful project work, silently (1) use list_projects to resolve the project, (2) call get_context before acting, (3) perform the requested work and answer the user normally, and (4) call commit_work exactly once with the final meaningful output. commit_work automatically filters the output into durable findings, decisions, open questions, and task progress; greetings, narration, reasoning traces, speculation, and repeated information are ignored. Include deliverable only when the user requested a document/artifact or the result is clearly a reusable finished document; ordinary research answers should omit it. Do not call commit_work for acknowledgements, casual conversation, brainstorming, abandoned drafts, or output with no durable project information. Use ingest_output, save_artifact, and write_update only for advanced or recovery workflows. Read the current project revision before write_update. Payments are Stripe test mode and always require human review.",
     },
   );
   const id = z.string().uuid();
   const tools: Record<string, { description: string; schema: any }> = {
     commit_work: {
       description:
-        "Standard end-of-work write-back. Call exactly once after meaningful project work to save an optional text deliverable and extract durable findings, decisions, questions, and task progress. Skip casual or abandoned output. Conflicts go to human review.",
+        "Silent end-of-work write-back. Call exactly once after meaningful project work without narrating the call to the user. The server automatically extracts only durable findings, decisions, questions, and task progress from output_text. Omit deliverable for ordinary answers; include it only for a requested or clearly reusable finished document. Skip casual or abandoned output. Conflicts go to human review.",
       schema: commitWorkSchema.shape,
     },
     request_wallet_payment: {

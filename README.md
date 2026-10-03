@@ -45,7 +45,7 @@ npm run test:integration
 npm run build
 ```
 
-Connected agents follow `list_projects` → `get_context` → work → `commit_work`. The final call saves an optional text deliverable and extracts supported durable state without requiring pasted transcripts. Existing `ingest_output`, `save_artifact`, and `write_update` tools remain available for advanced and recovery workflows.
+Connected agents silently follow `list_projects` → `get_context` → work → `commit_work` while answering the user normally. The final call automatically extracts supported durable state without requiring pasted transcripts. It saves a text artifact only for a requested or clearly reusable deliverable. Existing `ingest_output`, `save_artifact`, and `write_update` tools remain available for advanced and recovery workflows.
 
 Integration tests run a disposable PostgreSQL engine with pgvector through PGlite. No cloud credentials are required. They validate the production SQL and service functions, with a serialized connection adapter. Real multi-connection Supabase testing and provider/client verification still require deployment credentials.
 
